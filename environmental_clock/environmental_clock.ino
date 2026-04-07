@@ -16,26 +16,22 @@ unsigned long lastSensorTick = 0;
 uint8_t currentPixel = 0;
 int filteredProximity = 0;
 
-uint32_t wheelColor(uint8_t position) {
-  position = 255 - position;
-  if (position < 85) {
-    return pixels.Color(255 - position * 3, 0, position * 3);
+uint32_t proximityColor(int proximity) {
+  proximity = 255 - constrain(proximity, 0, 255);
+
+  if (proximity < 128) {
+    const uint8_t blend = map(proximity, 0, 127, 0, 255);
+    return pixels.Color(0, blend, 255 - blend);
   }
 
-  if (position < 170) {
-    position -= 85;
-    return pixels.Color(0, position * 3, 255 - position * 3);
-  }
-
-  position -= 170;
-  return pixels.Color(position * 3, 255 - position * 3, 0);
+  const uint8_t blend = map(proximity, 128, 255, 0, 255);
+  return pixels.Color(blend, 255 - blend, 0);
 }
 
 void renderClock() {
   pixels.clear();
 
-  const uint8_t hue = map(filteredProximity, 0, 255, 160, 0);
-  const uint32_t activeColor = wheelColor(hue);
+  const uint32_t activeColor = proximityColor(filteredProximity);
   const uint32_t tailColor = pixels.Color(
     (uint8_t)((activeColor >> 16) & 0xFF) / 8,
     (uint8_t)((activeColor >> 8) & 0xFF) / 8,
