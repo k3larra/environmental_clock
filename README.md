@@ -10,8 +10,9 @@ I used the built-in `APDS9960` proximity sensor. That makes the clock respond to
 
 - One LED advances once per second around the 8-pixel strip, acting like a clock hand.
 - The active LED colour updates continuously from the proximity sensor, not only when the hand moves.
-- Far away objects produce cooler colours.
-- Close objects shift the colour toward warmer colours.
+- Far away objects produce blue light.
+- Mid-range objects produce green light.
+- Close objects produce red light.
 - A dim trailing pixel is left behind to make the motion easier to read.
 
 ## Non-blocking design
